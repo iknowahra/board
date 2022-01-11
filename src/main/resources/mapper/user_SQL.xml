@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ultra.board.mapper.UserMapper">
+    <select id="getUserOne" parameterType="ultra.board.dto.UserDto" resultType="HashMap">
+        SELECT *
+          FROM USER
+        <if test="email != null || email != undefined">
+            WHERE EMAIL = #{email}
+        </if>
+    </select>
+    <insert id="postUserOne" parameterType="ultra.board.dto.UserDto">
+        INSERT INTO USER
+        VALUE ( userNm
+              , userPw
+              , email
+              )
+         INTO
+              #{userId}
+            , #{userPw}
+            , #{email}
+        <selectKey>
+            SELECT *
+              FROM USER
+             WHERE ID = (SELECT MAX(ID) FROM USER)
+        </selectKey>
+    </insert>
+</mapper>
