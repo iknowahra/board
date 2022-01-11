@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ultra.board.mapper.BoardMapper">
+    <select id="getBoardList" parameterType="String" resultType="HashMap">
+        /* board.getBoardList */
+        SELECT B.*
+              ,U.userNm
+          FROM BOARD B
+         WHERE B.KIND = #{kind}
+         LEFT JOIN USER U
+           ON B.USERID = U.ID
+    </select>
+    <select id="getBoardOne" parameterType="ultra.board.dto.BoardDto" resultType="HashMap">
+        /* board.getBoardOne */
+        SELECT B.*
+              ,U.userNm
+          FROM BOARD B
+         WHERE B.KIND = #{kind}           /* 게시판 종류 */
+           AND B.ID = #{id}               /* 게시글 아이디 */
+        LEFT JOIN USER U
+          ON B.USERID = U.ID
+    </select>
+    <insert id="postBoardOne" parameterType="ultra.board.dto.BoardDto">
+        /* board.postBoardOne */
+        INSERT INTO BOARD
+          VALUE ( USERID
+                , TITLE
+                , CONTENT
+                )
+           INTO
+               , #{userId}
+               , #{title}
+               , #{content}
+        <selectKey resultType="HashMap">
+            SELECT B.*
+                  ,U.userNm
+              FROM BOARD B
+             WHERE ID = (
+                         SELECT MAX(ID)
+                           FROM BOARD
+                         )
+             LEFT JOIN USER U
+               ON B.USERID = U.ID
+        </selectKey>
+    </insert>
+</mapper>
