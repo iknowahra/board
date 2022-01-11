@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ultra.board.mapper.ReplyMapper">
+    <select id="getReplyList" parameterType="ultra.board.dto.ReplyDto" resultType="HashMap">
+        SELECT R.*
+             , U.userNm
+        FROM REPLY R
+        LEFT JOIN USER U
+               ON R.USERID = U.ID
+    </select>
+    <insert id="postReplyOne" parameterType="ultra.board.dto.ReplyDto">
+        INSERT INTO REPLY
+              VALUE ( USERID
+                    , CONTENT
+                    , PARENTID
+                    , DEPTH
+                    , GUESTNM
+                    , GUESTPW
+                    )
+              INTO
+                      #{userId}
+                    , #{content}
+                    , #{parentId}
+                    , #{depth}
+                    , #{guestNm}
+                    , #{guestPw}
+    </insert>
+</mapper>
